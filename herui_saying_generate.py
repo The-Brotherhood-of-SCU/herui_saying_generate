@@ -20,7 +20,9 @@ class Hr_dataset(Dataset):
         self.index2word={}
         self.data=[]
         index_start=len(self.word2index)
-        with open("saying.txt") as f:
+        with open("saying.txt",encoding="utf-8") as f:
+            hr_list=[i for i in f.read().split("\n") if i!=""]
+        with open("saying_fake.txt",encoding="utf-8") as f:
             hr_list=[i for i in f.read().split("\n") if i!=""]
         for lines in hr_list:
             string_list.append(self.word2index["<START>"])
@@ -32,7 +34,7 @@ class Hr_dataset(Dataset):
             string_list.append(self.word2index["<END>"])
         self.index2word={index:word for word,index in self.word2index.items()}
         self.data=torch.tensor(string_list)
-        print("Read Done")
+        print("Read Done,volcabulary",len(self.index2word))
     def __len__(self):
         return (len(self.data)-1)//stride
     def __getitem__(self, index) -> (torch.Tensor,torch.Tensor):
