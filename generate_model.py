@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-
+import torch.nn.functional as F
 embedding_dim=64
 
 class Generate_model_transformer(nn.Module):
@@ -12,7 +12,7 @@ class Generate_model_transformer(nn.Module):
     def forward():
         pass
 
-hidden_size=512
+hidden_size=128
 num_layers=1
 class Generate_model_lstm(nn.Module):
     def __init__(self, volcabulary_size) -> None:
@@ -21,7 +21,7 @@ class Generate_model_lstm(nn.Module):
         self.lstm=nn.LSTM(input_size=embedding_dim,hidden_size=hidden_size,num_layers =num_layers ,batch_first=True)
         self.h2h = nn.Linear(hidden_size, hidden_size)
         self.h2o = nn.Linear(hidden_size, volcabulary_size)
-    def forward(self, word_ids, lstm_hidden=None):
+    def forward(self, word_ids, lstm_hidden=None)->(torch.Tensor,torch.Tensor):
         embedded = self.embedding(word_ids)
         lstm_out, lstm_hidden = self.lstm(embedded, lstm_hidden)
         out = self.h2h(lstm_out)
